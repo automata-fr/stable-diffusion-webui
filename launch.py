@@ -13,7 +13,7 @@ dir_extensions = "extensions"
 python = sys.executable
 git = os.environ.get('GIT', "git")
 index_url = os.environ.get('INDEX_URL', "")
-
+git_repo = "https://github.com/automata-fr/stable-diffusion-webui/branches/master"
 
 def extract_arg(args, name):
     return [x for x in args if x != name], name in args
@@ -106,7 +106,7 @@ def git_clone(url, dir, name, commithash=None):
 def version_check(commit):
     try:
         import requests
-        commits = requests.get('https://api.github.com/repos/AUTOMATIC1111/stable-diffusion-webui/branches/master').json()
+        commits = requests.get(git_repo).json()
         if commit != "<none>" and commits['commit']['sha'] != commit:
             print("--------------------------------------------------------")
             print("| You are not up to date with the most recent release. |")
@@ -290,5 +290,7 @@ def start():
 
 
 if __name__ == "__main__":
-    prepare_enviroment()
-    start()
+    if '--prepare' in sys.argv:
+        prepare_enviroment()
+    else:
+        start()
